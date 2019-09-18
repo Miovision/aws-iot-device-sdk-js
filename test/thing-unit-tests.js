@@ -1565,7 +1565,7 @@ describe( "thing shadow class unit tests", function() {
           // Unregister it
           thingShadows.unregister('testShadow3');
           clock.restore();
-        });
+      });
     });
 //
 // Verify that shadow operations are performed using the correct qos values
