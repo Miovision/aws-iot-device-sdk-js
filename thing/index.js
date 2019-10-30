@@ -713,7 +713,7 @@ function ThingShadowsClient(deviceOptions, thingShadowOptions) {
    // Publish on non-thing topics.
    //
    this.publish = function(topic, message, options, callback) {
-      if (!isReservedTopic(topic)) {
+      if (!isThingShadowTopic(topic.split('/'), 'publish')) {
          device.publish(topic, message, options, callback);
       } else {
          throw ('cannot publish to reserved topic \'' + topic + '\'');
@@ -731,7 +731,7 @@ function ThingShadowsClient(deviceOptions, thingShadowOptions) {
          topicsArray = topics;
       }
       for (var i = 0; i < topicsArray.length; i++) {
-         if (isReservedTopic(topicsArray[i])) {
+         if (isThingShadowTopic(topicsArray[i].split('/'), 'subscribe')) {
             throw ('cannot subscribe to topic array since one of them is a reserved topic \'' + topicsArray[i] + '\'');
          }
       }
@@ -748,7 +748,7 @@ function ThingShadowsClient(deviceOptions, thingShadowOptions) {
          topicsArray = topics;
       }
       for (var i = 0; i < topicsArray.length; i++) {
-         if (isReservedTopic(topicsArray[i])) {
+         if (isThingShadowTopic(topicsArray[i].split('/'), 'subscribe')) {
             throw ('cannot unsubscribe from topic array since one of them is a reserved topic \'' + topicsArray[i] + '\'');
          }
       }
