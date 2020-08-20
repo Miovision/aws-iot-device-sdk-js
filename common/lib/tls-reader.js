@@ -33,7 +33,9 @@ var exceptions = require('./exceptions');
 module.exports = function(options) {
 
    // verify certificate paths
-   if (isUndefined(options.keyPath) && isUndefined(options.privateKey)) {
+   if (isUndefined(options.keyPath) &&
+      isUndefined(options.privateKey) &&
+      isUndefined(options.privateKeyPKCSIdentifier)) {
       throw new Error(exceptions.NO_KEY_OPTION);
    }
    if (isUndefined(options.certPath) && isUndefined(options.clientCert)) {
@@ -100,6 +102,15 @@ module.exports = function(options) {
       options.ca = filesys.readFileSync(options.caPath);
    } else if (!isUndefined(options.caPath)) {
       throw new Error(exceptions.INVALID_CA_PATH_OPTION);
+   }
+
+   // If the private key is provided by PKCS11, we don't set key, we set
+   // privateKeyEngine and privateKeyIdentifier.
+   if (options.privateKeyPKCSIdentifier) {
+      options.key = undefined;
+      delete options['key'];
+      options.privateKeyEngine = 'pkcs11';
+      options.privateKeyIdentifier = options.privateKeyPKCSIdentifier;
    }
 
    // request certificate from partner
